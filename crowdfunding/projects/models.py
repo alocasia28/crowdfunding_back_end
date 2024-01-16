@@ -1,4 +1,6 @@
 from django.db import models
+from django.contrib.auth import get_user_model 
+#note: you can't just import USER in this because not recommended because "of a quirk in the way django handles users"
 
 # Create your models here.
 
@@ -9,7 +11,11 @@ class Project(models.Model):
     image = models.URLField()
     is_open = models.BooleanField()
     date_created = models.DateTimeField()
-    owner = models.CharField(max_length=200)
+    owner = models.ForeignKey(
+        get_user_model(),
+        on_delete=models.CASCADE, 
+        related_name='owned_projects'
+    )
 
 
 class Pledge(models.Model):
@@ -21,5 +27,11 @@ class Pledge(models.Model):
         on_delete=models.CASCADE,
         related_name='pledges'
     )
-    supporter = models.CharField(max_length=200)
+    supporter = models.ForeignKey(
+        get_user_model(),
+        on_delete=models.CASCADE,
+        related_name='supporter_pledges'
+    )
+
+    
     
