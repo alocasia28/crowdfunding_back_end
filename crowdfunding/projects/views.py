@@ -4,6 +4,7 @@ from .models import Project, Pledge
 from .serializers import ProjectSerializer, PledgeSerializer, ProjectDetailSerializer
 from django.http import Http404
 from rest_framework import status, permissions
+from .permissions import IsOwnerOrReadOnly
 
 class ProjectList(APIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
@@ -26,12 +27,32 @@ class ProjectList(APIView):
             serializer.errors, 
             status=status.HTTP_400_BAD_REQUEST
         )
-        
-
+    
+    def put(self, request, pk):
+        project = self.get_object(pk)
+        serializer = ProjectDetailSerializer(
+            instance=project, 
+            data=request.data,
+            partial=True
+        )
+        if serializer.is_valid():
+            serializer.save()
+            return Response(
+                serializer.data,
+                    status=status.HTTP_200_OK
+            )
+            #I have added this in as my custom OK code. If something breaks, check this. If that works, add in a bad error for the
 class ProjectDetail(APIView):
+    permission_classes = [
+        permissions.IsAuthenticatedOrReadOnly,
+        IsOwnerOrReadOnly
+    ]
     def get_object(self, pk):
         try:
-            return Project.objects.get(pk=pk)
+            project = Project.objects.get(pk=pk)
+            self.check_object_permissions(self.request,project)
+            return project
+        #modifying the get object model to include a permissions check. So the view will apply its registered permissions whenever a user performs an action on a model instance
         except Project.DoesNotExist:
             raise Http404
     
@@ -41,6 +62,8 @@ class ProjectDetail(APIView):
         return Response(serializer.data)
     
 class PledgeList(APIView):
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    #this requires a user to be authenticated so we know who submitted the pledge. A user is not able to change their pledge after submitting. 
     def get(self, request):
         pledges = Pledge.objects.all()
         serializer = PledgeSerializer(pledges, many=True)
@@ -57,3 +80,6 @@ class PledgeList(APIView):
             serializer.errors,
             status=status.HTTP_400_BAD_REQUEST
         )
+    
+
+
