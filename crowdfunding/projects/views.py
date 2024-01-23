@@ -72,6 +72,7 @@ class ProjectDetail(APIView):
     def total_pledges(self, request, pk):
         total = Pledge.objects.filter(project=pk).aggregate(Sum('amount'))
         return Response(total,status=status.HTTP_200_OK)
+    
                 
 class PledgeList(APIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
