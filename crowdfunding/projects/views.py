@@ -30,19 +30,7 @@ class ProjectList(APIView):
             status=status.HTTP_400_BAD_REQUEST
         )
     
-    def put(self, request, pk):
-        project = self.get_object(pk)
-        serializer = ProjectDetailSerializer(
-            instance=project, 
-            data=request.data,
-            partial=True
-        )
-        if serializer.is_valid():
-            serializer.save()
-            return Response(
-                serializer.data,
-                    status=status.HTTP_200_OK
-            )
+    
             
 
 
@@ -67,6 +55,20 @@ class ProjectDetail(APIView):
         project.update_total(project_id=pk)
         serializer = ProjectDetailSerializer(project)
         return Response(serializer.data)
+    
+    def put(self, request, pk):
+        project = self.get_object(pk)
+        serializer = ProjectDetailSerializer(
+            instance=project, 
+            data=request.data,
+            partial=True
+        )
+        if serializer.is_valid():
+            serializer.save()
+            return Response(
+                serializer.data,
+                    status=status.HTTP_200_OK
+            )
         
     #This is what Atlas and I did. 
     def total_pledges(self, request, pk):
