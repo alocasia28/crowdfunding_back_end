@@ -4,7 +4,7 @@ from django.db.models import Sum
 #note: you can't just import USER in this because not recommended because "of a quirk in the way django handles users"
 
 # Create your models here.
-User = get_user_model
+User = get_user_model()
 
 
 class Project(models.Model):
@@ -26,7 +26,7 @@ class Project(models.Model):
     date_created = models.DateTimeField()
     categories = models.CharField(max_length=100,choices=CATEGORIES, default="No Category")
     owner = models.ForeignKey(
-        get_user_model(),
+        User,
         on_delete=models.CASCADE, 
         related_name='owned_projects'
     )
@@ -45,10 +45,16 @@ class Pledge(models.Model):
         related_name='pledges'
     )
     supporter = models.ForeignKey(
-        get_user_model(),
+        User,
         on_delete=models.CASCADE,
         related_name='supporter_pledges'
     )
+
+class Comment(models.Model):
+    project = models.ForeignKey(Project, on_delete=models.CASCADE,related_name="comments")
+    body = models.TextField()
+    author = models.ForeignKey(User,on_delete=models.SET_NULL, null=True, related_name="comments")
+    visible = models.BooleanField(default=True)
 
     
     
