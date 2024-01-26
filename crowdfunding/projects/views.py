@@ -1,9 +1,9 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .models import Project, Pledge
-from .serializers import ProjectSerializer, PledgeSerializer, ProjectDetailSerializer
+from .models import Comment, Project, Pledge
+from .serializers import CommentSerializer, ProjectSerializer, PledgeSerializer, ProjectDetailSerializer
 from django.http import Http404
-from rest_framework import status, permissions
+from rest_framework import status, permissions, generics
 from .permissions import IsOwnerOrReadOnly
 from django.db.models import Sum
 
@@ -103,4 +103,12 @@ class PledgeList(APIView):
         )
     
 
+class CommentListAPI(generics.ListCreateAPIView):
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    queryset = Comment.objects.filter(visible=True)
+    serializer_class = CommentSerializer 
 
+class CommentDetailAPI(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    queryset = Comment.objects.filter(visible=True)
+    serializer_class = CommentSerializer

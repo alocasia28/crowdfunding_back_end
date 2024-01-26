@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Project, Pledge
+from .models import Project, Pledge, Comment
 
 class PledgeSerializer(serializers.ModelSerializer):
     supporter = serializers.ReadOnlyField(source='supporter.id')
@@ -15,6 +15,11 @@ class ProjectSerializer(serializers.ModelSerializer):
         model = Project
         fields ='__all__'
 
+class CommentSerializer(serializers.ModelSerializer):
+    class Meta: 
+        model = Comment
+        exclude = ['visible']
+
 class ProjectDetailSerializer(ProjectSerializer):
     pledges = PledgeSerializer(many=True, read_only=True)
 
@@ -29,4 +34,6 @@ class ProjectDetailSerializer(ProjectSerializer):
         instance.owner = validated_data.get('owner',instance.owner)
         instance.save()
         return instance
+
+
     
