@@ -6,14 +6,14 @@ from django.db.models import Sum
 # Create your models here.
 
 class Project(models.Model):
-    CATEGORIES = [
+    CATEGORIES = {
     ('Hydro', 'Hydroponics'),
     ('Container', ' Container Gardening'),
     ('Raised', 'Raised Beds'),
     ('Indoor', 'Indoor Gardens'),
     ('No', 'No Category')
 
-    ]
+    }
 
     title = models.CharField(max_length=200)
     description = models.TextField()
