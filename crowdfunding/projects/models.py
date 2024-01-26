@@ -6,6 +6,15 @@ from django.db.models import Sum
 # Create your models here.
 
 class Project(models.Model):
+    CATEGORIES = [
+    ('Hydro', 'Hydroponics'),
+    ('Container', ' Container Gardening'),
+    ('Raised', 'Raised Beds'),
+    ('Indoor', 'Indoor Gardens'),
+    ('No', 'No Category')
+
+    ]
+
     title = models.CharField(max_length=200)
     description = models.TextField()
     goal = models.IntegerField()
@@ -13,6 +22,7 @@ class Project(models.Model):
     image = models.URLField()
     is_open = models.BooleanField()
     date_created = models.DateTimeField()
+    categories = models.CharField(max_length=100,choices=CATEGORIES, default="No Category")
     owner = models.ForeignKey(
         get_user_model(),
         on_delete=models.CASCADE, 
