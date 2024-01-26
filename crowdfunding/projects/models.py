@@ -4,6 +4,8 @@ from django.db.models import Sum
 #note: you can't just import USER in this because not recommended because "of a quirk in the way django handles users"
 
 # Create your models here.
+User = get_user_model
+
 
 class Project(models.Model):
     CATEGORIES = {
