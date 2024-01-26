@@ -6,6 +6,8 @@ class CustomUserSerializer(serializers.ModelSerializer):
         model = CustomUser
         fields = '__all__'
         extra_kwargs = {'password':{'write_only':True}} 
+
+        #you can also add the specific fields for the email address additional fields that you want to mandate here. 
         #serializer is looking at our model, we don't want it to share our passwords, we pass in a kwarg with extra info about how it should be serialized
         #this will send it to the model when a new user is created but will never bounce it back to the user
     

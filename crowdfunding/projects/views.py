@@ -70,6 +70,12 @@ class ProjectDetail(APIView):
                     status=status.HTTP_200_OK
             )
         
+    def delete(self, request, pk, format=None):
+        deleted = self.get_object(pk)
+        deleted.delete()
+        return Response(status=status.HTTP_200_OK)
+    #using a 200 response so in the front end I can display this with a nice message?
+        
     #This is what Atlas and I did. 
     def total_pledges(self, request, pk):
         total = Pledge.objects.filter(project=pk).aggregate(Sum('amount'))

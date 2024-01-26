@@ -9,7 +9,7 @@ class Project(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField()
     goal = models.IntegerField()
-    total = models.IntegerField(default=0)
+    total = models.IntegerField(default=0, null=True, blank=True)
     image = models.URLField()
     is_open = models.BooleanField()
     date_created = models.DateTimeField()
