@@ -50,11 +50,11 @@ class Pledge(models.Model):
         related_name='supporter_pledges'
     )
 
-class Comment(models.Model):
-    project = models.ForeignKey(Project, on_delete=models.CASCADE,related_name="comments")
-    body = models.TextField()
-    author = models.ForeignKey(User,on_delete=models.SET_NULL, null=True, related_name="comments")
-    visible = models.BooleanField(default=True)
+# class Comment(models.Model):
+#     project = models.ForeignKey(Project, on_delete=models.CASCADE,related_name="comments")
+#     body = models.TextField()
+#     author = models.ForeignKey(User,on_delete=models.SET_NULL, null=True, related_name="comments")
+#     visible = models.BooleanField(default=True)
 
     
     

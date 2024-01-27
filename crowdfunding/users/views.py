@@ -1,9 +1,10 @@
-from django.http import Http404
+from django.http import Http404, HttpResponse
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from .models import CustomUser
 from .serializers import CustomUserSerializer
+from rest_framework.permissions import IsAuthenticated
 
 class CustomUserList(APIView):
     def get(self, request):
@@ -11,11 +12,16 @@ class CustomUserList(APIView):
         serializer = CustomUserSerializer(users, many=True)
         return Response(serializer.data)
     def post(self, request):
+        if request.user.is_authenticated:
+            return Response(data="You cannot create another user while logged in", status=status.HTTP_403_FORBIDDEN)
+        
         serializer = CustomUserSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+        
 class CustomUserDetail(APIView):
     def get_object(self, pk):
         try:
