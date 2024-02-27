@@ -19,7 +19,7 @@ from django.urls import path, include
 # from django.views.generic import TemplateView
 from rest_framework.authtoken.views import obtain_auth_token
 
-from crowdfunding.users.views import CustomAuthToken
+# from crowdfunding.users.views import CustomAuthToken
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -27,6 +27,6 @@ urlpatterns = [
     path('', include('users.urls')),
     # path('',TemplateView.as_view(template_name="index.html")),
     path('api-auth/', include('rest_framework.urls')),
-    # path('api-token-auth/', obtain_auth_token, name='api_token_auth'),
-    path('api-token-auth/', CustomAuthToken.as_view(), name='api_token_auth')
+    path('api-token-auth/', obtain_auth_token, name='api_token_auth'),
+    # path('api-token-auth/', CustomAuthToken.as_view(), name='api_token_auth')
 ]
